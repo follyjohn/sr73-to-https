@@ -7,6 +7,8 @@ Created on May 2022
 """
 
 from flask import Flask
+import ssl
+
 
 # définir le message secret
 SECRET_MESSAGE = "monmotsecret" # A modifier
@@ -20,6 +22,8 @@ def get_secret_message():
 
 if __name__ == "__main__":
     # HTTP version
-    app.run(debug=True, host="0.0.0.0", port=8081)
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    context.load_cert_chain(certfile="server-public-key.pem", keyfile="server-private-key.pem", password="passwordsrv")
+    app.run(debug=False, host="0.0.0.0", port=8081, ssl_context=context)
     # HTTPS version
     # A compléter  : nécessité de déplacer les bons fichiers vers ce répertoire
